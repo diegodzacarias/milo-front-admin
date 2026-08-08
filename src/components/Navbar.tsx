@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { ChevronDown, User, LogOut } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -14,7 +13,7 @@ import {
 import { usePreferences, type CurrencyCode } from "@/lib/preferences";
 import { useAuth } from "@/lib/authContext";
 import { useToast } from "@/hooks/use-toast";
-import { normalizeApiError } from "@/lib/apiError";
+import LoginForm from "@/components/LoginForm";
 
 const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -22,10 +21,8 @@ const Navbar = () => {
   const [showFigureAdminMenu, setShowFigureAdminMenu] = useState(false);
   const [showCharacterAdminMenu, setShowCharacterAdminMenu] = useState(false);
   const { currencyCode, setCurrencyCode } = usePreferences();
-  const { token, username: authUsername, role, login, logout, isLoading, error } = useAuth();
+  const { token, username: authUsername, role, logout } = useAuth();
   const { toast } = useToast();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
 
   const closeMenus = () => {
     setShowWorkMenu(false);
@@ -49,36 +46,6 @@ const Navbar = () => {
     setShowCharacterAdminMenu((current) => !current);
     setShowWorkMenu(false);
     setShowFigureAdminMenu(false);
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!username || !password) {
-      toast({
-        title: "Error",
-        description: "Por favor completa todos los campos",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      await login(username, password);
-      setUsername("");
-      setPassword("");
-      setShowLogin(false);
-      toast({
-        title: "Éxito",
-        description: "Sesión iniciada correctamente",
-      });
-    } catch (err) {
-      const apiError = normalizeApiError(err, "Error al iniciar sesión");
-      toast({
-        title: "Error de login",
-        description: apiError.message,
-        variant: "destructive",
-      });
-    }
   };
 
   const handleLogout = () => {
@@ -321,34 +288,7 @@ const Navbar = () => {
       {showLogin && !token && (
         <div className="absolute right-4 top-20 z-50 w-72 rounded-2xl border border-border bg-card p-5 shadow-airbnb">
           <h3 className="mb-4 text-lg font-semibold text-foreground">Iniciar Sesión</h3>
-          <form onSubmit={handleLogin} className="space-y-3">
-            <Input
-              placeholder="Usuario"
-              type="text"
-              autoComplete="username"
-              className="bg-muted border-border"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              disabled={isLoading}
-            />
-            <Input
-              placeholder="Contraseña"
-              type="password"
-              autoComplete="current-password"
-              className="bg-muted border-border"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoading}
-            />
-            {error && <p className="text-xs text-destructive">{error}</p>}
-            <Button
-              type="submit"
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-              disabled={isLoading}
-            >
-              {isLoading ? "Ingresando..." : "Entrar"}
-            </Button>
-          </form>
+          <LoginForm onSuccess={() => setShowLogin(false)} />
         </div>
       )}
     </nav>
