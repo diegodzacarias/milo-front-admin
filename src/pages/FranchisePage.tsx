@@ -18,6 +18,7 @@ import LoadingOverlay from "@/components/ui/loading-overlay";
 import PageControls from "@/components/ui/page-controls";
 import FranchiseFormDialog, { Franchise } from "@/components/franchise/FranchiseFormDialog";
 import FranchiseTable from "@/components/franchise/FranchiseTable";
+import { authFetch } from "@/lib/apiClient";
 import { ApiErrorResponse, readApiErrorResponse, toClientApiError } from "@/lib/apiError";
 import { defaultPageMeta, getPageContent, getPageMeta, withPagination } from "@/lib/page";
 
@@ -45,7 +46,7 @@ const FranchisePage = () => {
     if (showLoading) setLoading(true);
 
     try {
-      const response = await fetch(withPagination(FRANCHISES_ENDPOINT, page, pageSize));
+      const response = await authFetch(withPagination(FRANCHISES_ENDPOINT, page, pageSize));
 
       if (!response.ok) {
         console.error("Error fetching franchises");
@@ -101,7 +102,7 @@ const FranchisePage = () => {
       : FRANCHISES_ENDPOINT;
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await authFetch(endpoint, {
         method: isEditing ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +133,7 @@ const FranchisePage = () => {
     setDeleting(true);
 
     try {
-      const response = await fetch(`${FRANCHISES_ENDPOINT}/${franchiseToDelete.id}`, {
+      const response = await authFetch(`${FRANCHISES_ENDPOINT}/${franchiseToDelete.id}`, {
         method: "DELETE",
       });
 

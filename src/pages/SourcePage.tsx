@@ -19,6 +19,7 @@ import PageControls from "@/components/ui/page-controls";
 import SourceFormDialog, { Source, SourcePayload } from "@/components/source/SourceFormDialog";
 import SourceTable from "@/components/source/SourceTable";
 import { useReferenceData } from "@/hooks/useReferenceData";
+import { authFetch } from "@/lib/apiClient";
 import { ApiErrorResponse, readApiErrorResponse, toClientApiError } from "@/lib/apiError";
 import { defaultPageMeta, getPageContent, getPageMeta, withPagination } from "@/lib/page";
 
@@ -69,7 +70,7 @@ const SourcePage = () => {
     if (showLoading) setLoading(true);
 
     try {
-      const response = await fetch(withPagination(SOURCES_ENDPOINT, page, pageSize));
+      const response = await authFetch(withPagination(SOURCES_ENDPOINT, page, pageSize));
 
       if (!response.ok) {
         console.error("Error fetching sources");
@@ -125,7 +126,7 @@ const SourcePage = () => {
     const endpoint = isEditing ? `${SOURCES_ENDPOINT}/${selectedSource?.id}` : SOURCES_ENDPOINT;
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await authFetch(endpoint, {
         method: isEditing ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -155,7 +156,7 @@ const SourcePage = () => {
     setDeleting(true);
 
     try {
-      const response = await fetch(`${SOURCES_ENDPOINT}/${sourceToDelete.id}`, {
+      const response = await authFetch(`${SOURCES_ENDPOINT}/${sourceToDelete.id}`, {
         method: "DELETE",
       });
 

@@ -25,6 +25,7 @@ import CandidateReviewFormDialog, {
 import CandidateReviewTable from "@/components/candidateReview/CandidateReviewTable";
 import type { FigureOption, SourceOption } from "@/components/figureAlias/FigureAliasFormDialog";
 import { useReferenceData } from "@/hooks/useReferenceData";
+import { authFetch } from "@/lib/apiClient";
 import { ApiErrorResponse, readApiErrorResponse, toClientApiError } from "@/lib/apiError";
 import { defaultPageMeta, getPageContent, getPageMeta, withPageSize, withPagination } from "@/lib/page";
 import type { Franchise } from "@/types/franchise";
@@ -136,9 +137,9 @@ const CandidateReviewPage = () => {
 
     try {
       const [candidatesResponse, figuresResponse, sourcesResponse, franchisesData] = await Promise.all([
-        fetch(withPagination(buildCandidatesEndpoint(figureIdFilter), page, pageSize)),
-        fetch(withPageSize(FIGURES_ENDPOINT)),
-        fetch(withPageSize(SOURCES_ENDPOINT)),
+        authFetch(withPagination(buildCandidatesEndpoint(figureIdFilter), page, pageSize)),
+        authFetch(withPageSize(FIGURES_ENDPOINT)),
+        authFetch(withPageSize(SOURCES_ENDPOINT)),
         getFranchises().catch((error) => {
           console.error("Error fetching franchises:", error);
           return [];
@@ -278,7 +279,7 @@ const CandidateReviewPage = () => {
       : CANDIDATES_ENDPOINT;
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await authFetch(endpoint, {
         method: isEditing ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -305,7 +306,7 @@ const CandidateReviewPage = () => {
     setDeleting(true);
 
     try {
-      const response = await fetch(`${CANDIDATES_ENDPOINT}/${candidateToDelete.id}`, {
+      const response = await authFetch(`${CANDIDATES_ENDPOINT}/${candidateToDelete.id}`, {
         method: "DELETE",
       });
 
@@ -332,7 +333,7 @@ const CandidateReviewPage = () => {
     setStatusChanging(true);
 
     try {
-      const response = await fetch(`${CANDIDATES_ENDPOINT}/${candidate.id}/${action}`, {
+      const response = await authFetch(`${CANDIDATES_ENDPOINT}/${candidate.id}/${action}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reviewNotes: candidate.reviewNotes || "" }),

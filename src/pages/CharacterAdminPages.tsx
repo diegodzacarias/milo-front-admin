@@ -47,6 +47,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { authFetch } from "@/lib/apiClient";
 import { ApiErrorResponse, readApiErrorResponse, toClientApiError } from "@/lib/apiError";
 import { defaultPageMeta, getPageContent, getPageMeta, withPageSize, withPagination } from "@/lib/page";
 import { cn } from "@/lib/utils";
@@ -308,7 +309,7 @@ const CharacterAdminPage = ({ config }: { config: PageConfig }) => {
     if (showLoading) setLoading(true);
 
     try {
-      const response = await fetch(
+      const response = await authFetch(
         withPagination(buildFilteredEndpoint(), page, pageSize, `${sort.field},${sort.direction}`)
       );
 
@@ -335,7 +336,7 @@ const CharacterAdminPage = ({ config }: { config: PageConfig }) => {
       const entries = await Promise.all(
         Array.from(needed).map(async (key) => {
           const loader = relationLoaders[key as keyof OptionState];
-          const response = await fetch(withPageSize(loader.endpoint));
+          const response = await authFetch(withPageSize(loader.endpoint));
           if (!response.ok) return [key, []] as const;
           const data = await response.json();
           return [key, getPageContent<EntityRecord>(data).map(loader.map)] as const;
@@ -360,7 +361,7 @@ const CharacterAdminPage = ({ config }: { config: PageConfig }) => {
 
     await Promise.all(
       config.relatedSections.map(async (section) => {
-        const response = await fetch(withPageSize(`${section.endpoint}?${section.filterParam}=${record.id}`));
+        const response = await authFetch(withPageSize(`${section.endpoint}?${section.filterParam}=${record.id}`));
         if (!response.ok) return;
         const data = await response.json();
         result[section.title] = getPageContent<EntityRecord>(data);
@@ -481,7 +482,7 @@ const CharacterAdminPage = ({ config }: { config: PageConfig }) => {
     const endpoint = isEditing ? `${config.endpoint}/${selectedRecord?.id}` : config.endpoint;
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await authFetch(endpoint, {
         method: isEditing ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(buildPayload()),
@@ -507,7 +508,7 @@ const CharacterAdminPage = ({ config }: { config: PageConfig }) => {
     setDeleting(true);
 
     try {
-      const response = await fetch(`${config.endpoint}/${recordToDelete.id}`, {
+      const response = await authFetch(`${config.endpoint}/${recordToDelete.id}`, {
         method: "DELETE",
       });
 

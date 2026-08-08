@@ -24,6 +24,7 @@ import FigureSourceListingFormDialog, {
 } from "@/components/figureSourceListing/FigureSourceListingFormDialog";
 import FigureSourceListingTable from "@/components/figureSourceListing/FigureSourceListingTable";
 import { useReferenceData } from "@/hooks/useReferenceData";
+import { authFetch } from "@/lib/apiClient";
 import { ApiErrorResponse, readApiErrorResponse, toClientApiError } from "@/lib/apiError";
 import { defaultPageMeta, getPageContent, getPageMeta, withPageSize, withPagination } from "@/lib/page";
 import type { Franchise } from "@/types/franchise";
@@ -93,9 +94,9 @@ const FigureSourceListingPage = () => {
 
     try {
       const [listingsResponse, figuresResponse, sourcesResponse, franchisesData] = await Promise.all([
-        fetch(withPagination(FIGURE_SOURCE_LISTINGS_ENDPOINT, page, pageSize)),
-        fetch(withPageSize(FIGURES_ENDPOINT)),
-        fetch(withPageSize(SOURCES_ENDPOINT)),
+        authFetch(withPagination(FIGURE_SOURCE_LISTINGS_ENDPOINT, page, pageSize)),
+        authFetch(withPageSize(FIGURES_ENDPOINT)),
+        authFetch(withPageSize(SOURCES_ENDPOINT)),
         getFranchises().catch((error) => {
           console.error("Error fetching franchises:", error);
           return [];
@@ -213,7 +214,7 @@ const FigureSourceListingPage = () => {
       : FIGURE_SOURCE_LISTINGS_ENDPOINT;
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await authFetch(endpoint, {
         method: isEditing ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -242,7 +243,7 @@ const FigureSourceListingPage = () => {
     setDeleting(true);
 
     try {
-      const response = await fetch(`${FIGURE_SOURCE_LISTINGS_ENDPOINT}/${listingToDelete.id}`, {
+      const response = await authFetch(`${FIGURE_SOURCE_LISTINGS_ENDPOINT}/${listingToDelete.id}`, {
         method: "DELETE",
       });
 
