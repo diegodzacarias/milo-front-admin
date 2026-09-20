@@ -53,7 +53,7 @@ const App = () => (
                 <Toaster />
                 <Sonner />
 
-                <BrowserRouter basename="/anime-figure-market">
+                <BrowserRouter basename={import.meta.env.BASE_URL}>
                     <Suspense fallback={<RouteFallback />}>
                         <Routes>
                             <Route path="/" element={<Index />} />

@@ -1,4 +1,4 @@
-# Plan de separación y mejora — Admin (anime-figure-market)
+# Plan de separación y mejora — Admin (milo-front-admin)
 
 > Estado: propuesto, 2026-08-01. Complementa a `UI_SPLIT_PLAN.md` (que definió la separación de
 > UIs a alto nivel) con dos cosas que ese documento no cubre: (1) una auditoría concreta del

@@ -1,4 +1,4 @@
 export const config = {
-  platformName: "AnimeFigures",
+  platformName: "Milo",
   contactEmail: "diegodzacarias@gmail.com",
 } as const;

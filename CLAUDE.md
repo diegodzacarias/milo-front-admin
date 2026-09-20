@@ -4,13 +4,13 @@ Este archivo provee orientación a Claude Code (claude.ai/code) cuando trabaja e
 
 ## Propósito del proyecto
 
-**anime-figure-market** ("Milo") es una SPA con dos superficies:
+**milo-front-admin** ("Milo", antes `anime-figure-market`) es una SPA con dos superficies:
 
 1. **Catálogo público** — tienda para explorar franquicias y figuras de anime (`/`, `/anime/:id`, `/figure/:id`).
 2. **Back-office de administración** — gestión del pipeline de datos bajo `/work/*`, `/figure-admin/*` y `/character-admin/*`. Esta es la superficie principal en desarrollo activo.
 
 Backend: `figure-market-core` en `https://figure-market-core.onrender.com/api`.  
-Deploy en GitHub Pages: `https://diegodzacarias.github.io/anime-figure-market`.
+Deploy en GitHub Pages: `https://diegodzacarias.github.io/milo-front-admin`.
 
 ## Comandos
 
@@ -28,7 +28,7 @@ npm run preview      # previsualizar el último build localmente
 
 ### Routing
 
-- `BrowserRouter` con `basename="/anime-figure-market"` (requerido por GitHub Pages).
+- `BrowserRouter` con `basename={import.meta.env.BASE_URL}` (requerido por GitHub Pages; el valor sale de `base` en `vite.config.ts`, que debe coincidir con el nombre del repo). Los links internos escritos a mano deben usar `import.meta.env.BASE_URL`, nunca el nombre del repo hardcodeado.
 - Cada página se importa con `React.lazy()` dentro de `App.tsx`, envuelta en un `<Suspense>` global.
 - `CharacterAdminPages.tsx` exporta múltiples páginas; cada una se extrae con `.then(m => ({ default: m.XPage }))`.
 

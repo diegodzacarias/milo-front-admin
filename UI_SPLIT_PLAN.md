@@ -9,7 +9,7 @@
 
 ## 1. Situación actual
 
-Un solo repo (`anime-figure-market`) con las dos superficies mezcladas, deployado entero en
+Un solo repo (`milo-front-admin`, antes `anime-figure-market`) con las dos superficies mezcladas, deployado entero en
 GitHub Pages. Origen del esqueleto: template de Lovable (`vite_react_shadcn_ts`).
 
 | Superficie | Rutas actuales | Páginas |
@@ -31,7 +31,7 @@ Para el admin eso es irrelevante; para una web de presentación de figuras es de
                         API REST — NO cambia
                        /                      \
         ┌─────────────────────────┐   ┌──────────────────────────────┐
-        │  figure-market-web      │   │  anime-figure-market (este)  │
+        │  figure-market-web      │   │  milo-front-admin (este)     │
         │  (repo NUEVO)           │   │  queda como ADMIN            │
         │  Catálogo público       │   │  Back-office del pipeline    │
         │  Next.js + SSG/ISR      │   │  Vite + React SPA (igual)    │
