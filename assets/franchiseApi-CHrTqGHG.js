@@ -1,1 +1,0 @@
-import{a as e}from"./apiClient-DOZMLFul.js";import{g as s}from"./page-CtykA7YV.js";async function n(){const a=await e("/v1/franchises",{query:{page:0,size:1e3,sort:"name,asc"},fallbackMessage:"Error fetching franchises."});return s(a)}export{n as g};
