@@ -1,9 +1,9 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "milo-front-admin",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://diegodzacarias.github.io/anime-figure-market",
+  "homepage": "https://diegodzacarias.github.io/milo-front-admin",
   "scripts": {
     "dev": "vite",
     "build": "vite build && node -e \"const fs=require('fs');fs.copyFileSync('dist/index.html','dist/404.html');fs.writeFileSync('dist/.nojekyll','')\"",

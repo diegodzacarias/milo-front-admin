@@ -132,7 +132,7 @@ const CandidateReviewTable = ({
                   <TableCell className="min-w-56">
                     {candidate.figureId ? (
                       <a
-                        href={`/anime-figure-market/figure/${candidate.figureId}`}
+                        href={`${import.meta.env.BASE_URL}figure/${candidate.figureId}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 font-medium text-primary hover:underline"

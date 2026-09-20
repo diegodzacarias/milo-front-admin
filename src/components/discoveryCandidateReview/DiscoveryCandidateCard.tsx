@@ -7,7 +7,7 @@ import type { FigureDiscoveryCandidate } from "@/types/discoveryCandidate";
 
 const FALLBACK_IMAGE_URL = `${import.meta.env.BASE_URL}placeholder.svg`;
 
-const FIGURE_DETAIL_BASE_URL = "/anime-figure-market/figure";
+const FIGURE_DETAIL_BASE_URL = `${import.meta.env.BASE_URL}figure`;
 
 const statusBadgeVariant: Record<FigureDiscoveryCandidate["status"], "secondary" | "default" | "outline"> = {
   PENDING_REVIEW: "secondary",

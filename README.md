@@ -1,4 +1,4 @@
-# Anime Figure Market Frontend
+# Milo Front Admin
 
 Frontend administrativo y de consulta para gestionar figuras, franquicias, sources, aliases, listings y candidatos provenientes de scraping.
 
@@ -127,7 +127,7 @@ El deploy publica el contenido compilado de `dist` en la rama `gh-pages`.
 La web publica queda disponible en:
 
 ```text
-https://diegodzacarias.github.io/anime-figure-market/
+https://diegodzacarias.github.io/milo-front-admin/
 ```
 
 El codigo fuente puede vivir en ramas como `main` o ramas de trabajo, pero la pagina publicada depende del ultimo deploy enviado a `gh-pages`.
