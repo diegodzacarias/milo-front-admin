@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown, User } from "lucide-react";
+import { ChevronDown, User, LogOut } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -12,6 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { usePreferences, type CurrencyCode } from "@/lib/preferences";
+import { useAuth } from "@/lib/authContext";
+import { useToast } from "@/hooks/use-toast";
+import LoginForm from "@/components/LoginForm";
 
 const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -19,6 +21,8 @@ const Navbar = () => {
   const [showFigureAdminMenu, setShowFigureAdminMenu] = useState(false);
   const [showCharacterAdminMenu, setShowCharacterAdminMenu] = useState(false);
   const { currencyCode, setCurrencyCode } = usePreferences();
+  const { token, username: authUsername, role, logout } = useAuth();
+  const { toast } = useToast();
 
   const closeMenus = () => {
     setShowWorkMenu(false);
@@ -42,6 +46,14 @@ const Navbar = () => {
     setShowCharacterAdminMenu((current) => !current);
     setShowWorkMenu(false);
     setShowFigureAdminMenu(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Sesión cerrada",
+      description: "Has cerrado sesión correctamente",
+    });
   };
 
   return (
@@ -226,33 +238,57 @@ const Navbar = () => {
             Beta
           </Badge>
 
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-2 rounded-full border-border text-foreground hover:bg-muted"
-            onClick={() => setShowLogin(!showLogin)}
-          >
-            <User className="h-4 w-4" />
-            Login
-          </Button>
+          {token && authUsername ? (
+            <div className="relative">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 rounded-full border-border text-foreground hover:bg-muted"
+                onClick={() => setShowLogin(!showLogin)}
+              >
+                <User className="h-4 w-4" />
+                {authUsername}
+              </Button>
+
+              {showLogin && (
+                <div className="absolute right-0 top-12 z-50 w-48 rounded-lg border border-border bg-card p-3 shadow-airbnb">
+                  <div className="mb-3 border-b border-border pb-3">
+                    <p className="text-sm font-medium text-foreground">{authUsername}</p>
+                    <Badge variant="secondary" className="mt-1 text-[10px] uppercase tracking-wide">
+                      {role}
+                    </Badge>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start gap-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Cerrar sesión
+                  </Button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 rounded-full border-border text-foreground hover:bg-muted"
+              onClick={() => setShowLogin(!showLogin)}
+            >
+              <User className="h-4 w-4" />
+              Login
+            </Button>
+          )}
         </div>
       </div>
 
       {/* Login dropdown */}
-      {showLogin && (
+      {showLogin && !token && (
         <div className="absolute right-4 top-20 z-50 w-72 rounded-2xl border border-border bg-card p-5 shadow-airbnb">
           <h3 className="mb-4 text-lg font-semibold text-foreground">Iniciar Sesión</h3>
-          <div className="space-y-3">
-            <Input placeholder="Email" type="email" className="bg-muted border-border" />
-            <Input placeholder="Contraseña" type="password" className="bg-muted border-border" />
-            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-              Entrar
-            </Button>
-            <p className="text-center text-xs text-muted-foreground">
-              ¿No tienes cuenta?{" "}
-              <span className="cursor-pointer text-primary hover:underline">Regístrate</span>
-            </p>
-          </div>
+          <LoginForm onSuccess={() => setShowLogin(false)} />
         </div>
       )}
     </nav>

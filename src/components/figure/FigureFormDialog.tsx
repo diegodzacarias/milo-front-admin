@@ -43,6 +43,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { authFetch } from "@/lib/apiClient";
 import { ApiErrorResponse, readApiErrorResponse, toClientApiError } from "@/lib/apiError";
 import { getPageContent, withPagination } from "@/lib/page";
 import { cn } from "@/lib/utils";
@@ -293,7 +294,7 @@ const FigureCharactersSection = ({
 
     try {
       const endpoint = `${FIGURE_CHARACTER_ENDPOINT}?figureId=${figureId}`;
-      const response = await fetch(withPagination(endpoint, 0, 100));
+      const response = await authFetch(withPagination(endpoint, 0, 100));
 
       if (!response.ok) {
         onApiError(await readApiErrorResponse(response, "Error loading figure characters."));
@@ -313,7 +314,7 @@ const FigureCharactersSection = ({
     setLoadingCharacters(true);
 
     try {
-      const response = await fetch(withPagination(CHARACTER_ENDPOINT, 0, 100, "canonicalName,asc"));
+      const response = await authFetch(withPagination(CHARACTER_ENDPOINT, 0, 100, "canonicalName,asc"));
 
       if (!response.ok) {
         onApiError(await readApiErrorResponse(response, "Error loading characters."));
@@ -344,7 +345,7 @@ const FigureCharactersSection = ({
 
     try {
       const endpoint = `${CHARACTER_FORM_ENDPOINT}?characterId=${characterId}`;
-      const response = await fetch(withPagination(endpoint, 0, 100, "canonicalName,asc"));
+      const response = await authFetch(withPagination(endpoint, 0, 100, "canonicalName,asc"));
 
       if (!response.ok) {
         onApiError(await readApiErrorResponse(response, "Error loading character forms."));
@@ -442,7 +443,7 @@ const FigureCharactersSection = ({
     setSavingRelation(true);
 
     try {
-      const response = await fetch(
+      const response = await authFetch(
         editing?.id ? `${FIGURE_CHARACTER_ENDPOINT}/${editing.id}` : FIGURE_CHARACTER_ENDPOINT,
         {
           method: editing?.id ? "PUT" : "POST",
@@ -471,7 +472,7 @@ const FigureCharactersSection = ({
     setSavingRelation(true);
 
     try {
-      const response = await fetch(`${FIGURE_CHARACTER_ENDPOINT}/${row.id}`, {
+      const response = await authFetch(`${FIGURE_CHARACTER_ENDPOINT}/${row.id}`, {
         method: "DELETE",
       });
 
@@ -710,7 +711,7 @@ const FigureImagesSection = ({
 
     try {
       const endpoint = `${FIGURE_IMAGE_ENDPOINT}?figureId=${figureId}`;
-      const response = await fetch(withPagination(endpoint, 0, 100, "sortOrder,asc"));
+      const response = await authFetch(withPagination(endpoint, 0, 100, "sortOrder,asc"));
 
       if (!response.ok) {
         onApiError(await readApiErrorResponse(response, "Error loading figure images."));
@@ -782,7 +783,7 @@ const FigureImagesSection = ({
     setSavingImage(true);
 
     try {
-      const response = await fetch(
+      const response = await authFetch(
         editing?.id ? `${FIGURE_IMAGE_ENDPOINT}/${editing.id}` : FIGURE_IMAGE_ENDPOINT,
         {
           method: editing?.id ? "PUT" : "POST",
@@ -811,7 +812,7 @@ const FigureImagesSection = ({
     setSavingImage(true);
 
     try {
-      const response = await fetch(`${FIGURE_IMAGE_ENDPOINT}/${row.id}`, {
+      const response = await authFetch(`${FIGURE_IMAGE_ENDPOINT}/${row.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -846,7 +847,7 @@ const FigureImagesSection = ({
     setSavingImage(true);
 
     try {
-      const response = await fetch(`${FIGURE_IMAGE_ENDPOINT}/${row.id}`, {
+      const response = await authFetch(`${FIGURE_IMAGE_ENDPOINT}/${row.id}`, {
         method: "DELETE",
       });
 

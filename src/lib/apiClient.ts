@@ -25,12 +25,38 @@ export function buildApiUrl(path: string, query?: Record<string, ApiQueryValue>)
   return url.toString();
 }
 
+export function getAuthToken(): string | null {
+  try {
+    const stored = localStorage.getItem("milo.auth");
+    if (!stored) return null;
+    const { token } = JSON.parse(stored);
+    return token || null;
+  } catch {
+    return null;
+  }
+}
+
+// fetch con Authorization para páginas admin legacy que no pasaron a apiRequest todavía.
+export function authFetch(input: RequestInfo | URL, init: RequestInit = {}): Promise<Response> {
+  const headers = new Headers(init.headers);
+  const token = getAuthToken();
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+  return fetch(input, { ...init, headers });
+}
+
 export async function apiRequest<T>(path: string, options: ApiRequestOptions = {}): Promise<T> {
   const { query, json, fallbackMessage = "Backend request failed.", ...init } = options;
   const headers = new Headers(init.headers);
 
   if (json !== undefined) {
     headers.set("Content-Type", "application/json");
+  }
+
+  const token = getAuthToken();
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
   }
 
   const response = await fetch(buildApiUrl(path, query), {

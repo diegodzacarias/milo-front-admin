@@ -43,6 +43,7 @@ import type {
 } from "@/components/figure/FigureFormDialog";
 import type { SourceOption } from "@/components/figureAlias/FigureAliasFormDialog";
 import { useReferenceData } from "@/hooks/useReferenceData";
+import { authFetch } from "@/lib/apiClient";
 import { ApiErrorResponse, normalizeApiError, readApiErrorResponse, toClientApiError } from "@/lib/apiError";
 import { defaultPageMeta, getPageContent, getPageMeta, withPageSize } from "@/lib/page";
 
@@ -156,10 +157,10 @@ const FigurePage = () => {
 
     try {
       const [figuresResponse, franchisesResponse, sourcesResponse, brandsResponse] = await Promise.all([
-        fetch(buildFigureSearchUrl(page, pageSize, search, filters, sort)),
-        fetch(withPageSize(FRANCHISES_ENDPOINT)),
-        fetch(withPageSize(SOURCES_ENDPOINT)),
-        fetch(withPageSize(BRANDS_ENDPOINT)),
+        authFetch(buildFigureSearchUrl(page, pageSize, search, filters, sort)),
+        authFetch(withPageSize(FRANCHISES_ENDPOINT)),
+        authFetch(withPageSize(SOURCES_ENDPOINT)),
+        authFetch(withPageSize(BRANDS_ENDPOINT)),
       ]);
 
       if (figuresResponse.ok) {
@@ -245,7 +246,7 @@ const FigurePage = () => {
   };
 
   const generateSlug = async (name: string) => {
-    const response = await fetch(
+    const response = await authFetch(
       `${FIGURE_SLUG_SUGGESTION_ENDPOINT}?title=${encodeURIComponent(name)}`
     );
 
@@ -265,7 +266,7 @@ const FigurePage = () => {
       params.set("excludeFigureId", figureId.toString());
     }
 
-    const response = await fetch(`${FIGURE_SLUG_AVAILABILITY_ENDPOINT}?${params.toString()}`);
+    const response = await authFetch(`${FIGURE_SLUG_AVAILABILITY_ENDPOINT}?${params.toString()}`);
 
     if (!response.ok) {
       setApiError(await readApiErrorResponse(response, "Error validating slug."));
@@ -283,7 +284,7 @@ const FigurePage = () => {
     const endpoint = isEditing ? `${FIGURES_ENDPOINT}/${selectedFigure?.id}` : FIGURES_ENDPOINT;
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await authFetch(endpoint, {
         method: isEditing ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -318,7 +319,7 @@ const FigurePage = () => {
     setDeleting(true);
 
     try {
-      const response = await fetch(`${FIGURES_ENDPOINT}/${figureToDelete.id}`, {
+      const response = await authFetch(`${FIGURES_ENDPOINT}/${figureToDelete.id}`, {
         method: "DELETE",
       });
 
