@@ -6,6 +6,7 @@
   "homepage": "https://diegodzacarias.github.io/milo-front-admin",
   "scripts": {
     "dev": "vite",
+    "dev:render": "vite --mode render --port 5173 --strictPort",
     "build": "vite build && node -e \"const fs=require('fs');fs.copyFileSync('dist/index.html','dist/404.html');fs.writeFileSync('dist/.nojekyll','')\"",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
