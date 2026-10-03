@@ -85,6 +85,9 @@ const Navbar = () => {
           <Link to="/" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
             Inicio
           </Link>
+          <Link to="/dashboard" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            Dashboard
+          </Link>
           <Link to="/color-test" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
             ColorTest
           </Link>

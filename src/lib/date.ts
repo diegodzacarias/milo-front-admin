@@ -1,3 +1,6 @@
+import { format, isValid, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
+
 const pad2 = (value: number) => value.toString().padStart(2, "0");
 
 const formatParts = (
@@ -54,4 +57,37 @@ export function formatDateTime(value?: string | number | Date | null) {
   }
 
   return formatDateTime(parsedDate);
+}
+
+// Duración en ms → "1 h 52 min", "3 min 20 s", "45 s" o "850 ms".
+export function formatDurationMs(value?: number | null) {
+  if (value === undefined || value === null || Number.isNaN(value)) return "-";
+  if (value < 1000) return `${Math.round(value)} ms`;
+
+  const totalSeconds = Math.round(value / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  if (hours > 0) return `${hours} h ${minutes} min`;
+  if (minutes > 0) return `${minutes} min ${seconds} s`;
+  return `${seconds} s`;
+}
+
+// El backend envía LocalDateTime sin zona (hora de Perú); parseISO lo interpreta como hora local
+// sin desplazarlo, que es lo que se quiere mostrar.
+export function parseLocalDateTime(value?: string | null): Date | null {
+  if (!value) return null;
+  const parsed = parseISO(value);
+  return isValid(parsed) ? parsed : null;
+}
+
+// "lun 29/09 15:00"
+export function formatShortDayTime(value?: string | null) {
+  const parsed = parseLocalDateTime(value);
+  return parsed ? format(parsed, "EEE dd/MM HH:mm", { locale: es }) : "-";
+}
+
+export function toIsoDate(value: Date) {
+  return format(value, "yyyy-MM-dd");
 }
