@@ -49,6 +49,23 @@
       rgba(0, 0, 0, 0.04) 0 2px 6px 0,
       rgba(0, 0, 0, 0.1) 0 4px 8px 0;
     --shadow-card: var(--shadow-airbnb);
+
+    /* Paleta categórica de gráficos (orden fijo, validada para daltonismo).
+       Se consume como var(--chart-N) desde ChartContainer. */
+    --chart-1: #2a78d6; /* azul */
+    --chart-2: #eb6834; /* naranja */
+    --chart-3: #1baf7a; /* aqua */
+    --chart-4: #eda100; /* amarillo */
+    --chart-5: #e87ba4; /* magenta */
+  }
+
+  /* Mismos tonos re-escalonados para superficie oscura. */
+  .dark {
+    --chart-1: #3987e5;
+    --chart-2: #d95926;
+    --chart-3: #199e70;
+    --chart-4: #c98500;
+    --chart-5: #d55181;
   }
 }
 

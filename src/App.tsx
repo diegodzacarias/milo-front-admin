@@ -22,6 +22,7 @@ const CandidateReviewPage = lazy(() => import("./pages/CandidateReviewPage.tsx")
 const DiscoveryCandidateReviewPage = lazy(() => import("./pages/DiscoveryCandidateReviewPage.tsx"));
 const FigureAliasGeneratorPage = lazy(() => import("./pages/FigureAliasGeneratorPage.tsx"));
 const ScrapingRunnerPage = lazy(() => import("./pages/ScrapingRunnerPage.tsx"));
+const DashboardPage = lazy(() => import("./pages/DashboardPage.tsx"));
 const CharacterPage = lazy(() =>
     import("./pages/CharacterAdminPages.tsx").then((module) => ({ default: module.CharacterPage }))
 );
@@ -63,6 +64,7 @@ const App = () => (
                                 <Route path="/anime/:animeId" element={<AnimeDetail />} />
                                 <Route path="/figure/:figureId" element={<FigureDetail />} />
                                 <Route path="/color-test" element={<ColorTest />} />
+                                <Route path="/dashboard" element={<RequireAuth><DashboardPage /></RequireAuth>} />
                                 <Route path="/work/figure" element={<RequireAuth><FigurePage /></RequireAuth>} />
                                 <Route path="/work/figure-alias" element={<RequireAuth><FigureAliasPage /></RequireAuth>} />
                                 <Route path="/work/figure-source-listing" element={<RequireAuth><FigureSourceListingPage /></RequireAuth>} />
